@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
-import Post from '../models/post';
-import User from '../models/user';
+import { Request, Response, NextFunction } from "express";
+import Post from "../models/post";
+import User from "../models/user";
 
 export const createPost = async (
   req: Request,
@@ -12,7 +12,7 @@ export const createPost = async (
     const userId = (req as any).user?.userId;
 
     if (!userId) {
-      res.status(401).json({ message: 'Not authenticated' });
+      res.status(401).json({ message: "Not authenticated" });
       return;
     }
 
@@ -38,11 +38,11 @@ export const getAllPosts = async (
       include: [
         {
           model: User,
-          as: 'author',
-          attributes: ['id', 'name', 'email'],
+          as: "author",
+          attributes: ["id", "name", "email"],
         },
       ],
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
     });
 
     res.json(posts);
@@ -62,14 +62,14 @@ export const getPostById = async (
       include: [
         {
           model: User,
-          as: 'author',
-          attributes: ['id', 'name', 'email'],
+          as: "author",
+          attributes: ["id", "name", "email"],
         },
       ],
     });
 
     if (!post) {
-      res.status(404).json({ message: 'Post not found' });
+      res.status(404).json({ message: "Post not found" });
       return;
     }
 
@@ -79,7 +79,7 @@ export const getPostById = async (
   }
 };
 
-export const updatePost = async (
+export const editPost = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -90,18 +90,18 @@ export const updatePost = async (
     const { title, body } = req.body;
 
     if (!userId) {
-      res.status(401).json({ message: 'Not authenticated' });
+      res.status(401).json({ message: "Not authenticated" });
       return;
     }
 
     const post = await Post.findByPk(postId);
     if (!post) {
-      res.status(404).json({ message: 'Post not found' });
+      res.status(404).json({ message: "Post not found" });
       return;
     }
 
     if (post.authorId !== userId) {
-      res.status(403).json({ message: 'Not authorized to update this post' });
+      res.status(403).json({ message: "Not authorized to update this post" });
       return;
     }
 
@@ -125,24 +125,25 @@ export const deletePost = async (
     const userId = (req as any).user?.userId;
 
     if (!userId) {
-      res.status(401).json({ message: 'Not authenticated' });
+      res.status(401).json({ message: "Not authenticated" });
       return;
     }
 
     const post = await Post.findByPk(postId);
     if (!post) {
-      res.status(404).json({ message: 'Post not found' });
+      res.status(404).json({ message: "Post not found" });
       return;
     }
 
     if (post.authorId !== userId) {
-      res.status(403).json({ message: 'Not authorized to delete this post' });
+      res.status(403).json({ message: "Not authorized to delete this post" });
       return;
     }
 
     await post.destroy();
-    res.json({ message: 'Post deleted successfully' });
+    res.json({ message: "Post deleted successfully" });
   } catch (error) {
     next(error);
   }
 };
+

@@ -41,7 +41,7 @@ export const register = async (
         user: { id: user.id, name: user.name, email: user.email },
       });
   } catch (error) {
-    next(error); // Pass errors to the error handling middleware
+    next(error);
   }
 };
 
