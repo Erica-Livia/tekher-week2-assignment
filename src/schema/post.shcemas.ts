@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { contentSchema, idParamSchema, titleSchema } from "./common.schemas";
-import { UpdateDateColumn } from "typeorm";
 
 export const createPostSchema = z.object({
   body: z.object({
@@ -20,10 +19,15 @@ export const updatePostSchema = z.object({
 })
 
 export const getPostByIdSchema = z.object({
-    params: idParamSchema,
+  params: idParamSchema,
 })
+
+export const deletePostSchema = z.object({
+  params: idParamSchema,
+});
 
 
 export type CreatePost = z.infer<typeof createPostSchema>;
 export type UpdatePost = z.infer<typeof updatePostSchema>;
 export type GetPostById = z.infer<typeof getPostByIdSchema>;
+export type DeletePost = z.infer<typeof deletePostSchema>;

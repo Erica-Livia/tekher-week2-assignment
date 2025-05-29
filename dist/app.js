@@ -44,6 +44,7 @@ const welcome_routes_1 = __importDefault(require("./routes/welcome.routes"));
 const users_routes_1 = __importDefault(require("./routes/users.routes"));
 const database_1 = require("./config/database");
 const errorHandler_1 = require("./middleware/errorHandler");
+const post_routes_1 = __importDefault(require("./routes/post.routes"));
 dotenv.config();
 const app = (0, express_1.default)();
 const PORT = parseInt(process.env.PORT || '8080');
@@ -54,6 +55,7 @@ app.use(express_1.default.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/', welcome_routes_1.default);
 app.use('/auth', auth_routes_1.default);
 app.use('/users', users_routes_1.default);
+app.use('/post', post_routes_1.default);
 // Error handling middleware
 app.use(errorHandler_1.errorHandler);
 // Start the server

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.nameSchema = exports.passwordSchema = exports.emailSchema = exports.paginationSchema = exports.idParamSchema = void 0;
+exports.contentSchema = exports.titleSchema = exports.nameSchema = exports.passwordSchema = exports.emailSchema = exports.paginationSchema = exports.idParamSchema = void 0;
 const zod_1 = require("zod");
 exports.idParamSchema = zod_1.z.object({
     id: zod_1.z.string().regex(/^\d+$/, "ID must be a valid number").transform(Number),
@@ -25,4 +25,11 @@ exports.nameSchema = zod_1.z
     .min(2, "Name must be at least 2 characters")
     .max(100, "Name must be less than 100 characters")
     .regex(/^[a-zA-Z\s]+$/, "Name can only contain letters and spaces");
+exports.titleSchema = zod_1.z
+    .string()
+    .min(2, "The title should have a least 2 characters")
+    .max(100, "The title must have less than 100 characters");
+exports.contentSchema = zod_1.z
+    .string()
+    .max(200, "The content must not exceed 200 characters");
 //# sourceMappingURL=common.schemas.js.map

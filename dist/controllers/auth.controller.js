@@ -39,7 +39,7 @@ exports.signup = (0, errorHandler_1.asyncHandler)(async (req, res, next) => {
     });
 });
 //Verify email
-exports.verifyEmail = (0, errorHandler_1.asyncHandler)(async (req, res, next) => {
+exports.verifyEmail = (0, errorHandler_1.asyncHandler)(async (req, res) => {
     const { token } = req.params;
     const payload = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
     const user = await userService.findById(payload.userId);

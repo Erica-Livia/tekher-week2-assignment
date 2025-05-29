@@ -6,6 +6,7 @@ import welcomeRoutes from './routes/welcome.routes';
 import usersRoutes from './routes/users.routes';
 import { initializeDatabase } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
+import postRoutes from './routes/post.routes';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use('/', welcomeRoutes);
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
+app.use('/post', postRoutes)
 
 
 // Error handling middleware

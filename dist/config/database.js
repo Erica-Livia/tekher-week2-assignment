@@ -37,6 +37,7 @@ exports.initializeDatabase = exports.AppDataSource = void 0;
 const typeorm_1 = require("typeorm");
 const dotenv = __importStar(require("dotenv"));
 const User_1 = require("../modals/User");
+const Post_1 = require("../modals/Post");
 dotenv.config();
 exports.AppDataSource = new typeorm_1.DataSource({
     type: 'postgres',
@@ -45,9 +46,8 @@ exports.AppDataSource = new typeorm_1.DataSource({
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_DATABASE || 'blog_db',
-    synchronize: process.env.NODE_ENV !== 'production', // Auto-create database schema in development.  
-    // logging: process.env.NODE_ENV !== 'production',
-    entities: [User_1.User],
+    synchronize: true,
+    entities: [User_1.User, Post_1.Post],
     migrations: ['src/migrations/**/*.ts'],
     subscribers: ['src/subscribers/**/*.ts'],
 });

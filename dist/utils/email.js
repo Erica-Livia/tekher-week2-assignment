@@ -12,7 +12,7 @@ async function sendVerificationEmail(email, link) {
         html: `
       <h2>Welcome!</h2>
       <p>Click below to verify your email:</p>
-      <a href="${link}">${link}</a>
+      <a href="http://localhost:5000/">${link}</a>
       <p>This link expires in 24 hours.</p>
     `,
     });
@@ -26,7 +26,7 @@ const sendResetPasswordEmail = async (email, resetLink) => {
         html: `
       <h2>Password Reset Request</h2>
       <p>Click the link below to reset your password:</p>
-      <a href="${resetLink}">${resetLink}</a>
+      <a href="http://localhost:5000/">${resetLink}</a>
       <p>If you didn't request this, you can safely ignore this email.</p>
       <p>This link will expire in 15 minutes.</p>
     `,

@@ -12,13 +12,13 @@ export class Post {
     @Column({ length: 200 })
     content!: string;
 
-    @CreateDateColumn()
-    createdAt!: Date;
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date | undefined;
     
     @UpdateDateColumn()
     updatedAt?: Date;
 
-    @ManyToOne(() => User, (user: { posts: any; }) => user.posts)
-    @JoinColumn({name: 'userId'})
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "userId" })
     user: User | undefined;
 }
