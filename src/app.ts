@@ -7,11 +7,16 @@ import usersRoutes from './routes/users.routes';
 import { initializeDatabase } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import postRoutes from './routes/post.routes';
+import cors from 'cors';
+
 
 dotenv.config();
 
 const app: Express = express();
-const PORT: number = parseInt(process.env.PORT || '8080');
+
+app.use(cors());
+
+const PORT: number = parseInt(process.env.PORT || '8000');
 
 //Middleware
 app.use(express.json({ limit: '10mb' }));

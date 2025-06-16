@@ -1,4 +1,6 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
+import { Post } from './Post';
+import { Like } from './Like';
 
 export type UserRole = 'user' | 'admin';
 @Entity('users')
@@ -29,4 +31,11 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt?: Date;
+
+  @OneToMany(() => Post, (post) => post.user)
+  posts!: Post[];
+
+  @OneToMany(() => Like, like => like.user)
+  likes: Like[] | undefined;
+
 }

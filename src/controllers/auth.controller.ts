@@ -38,7 +38,7 @@ export const signup = asyncHandler(async (
 
         const newUser = await authService.create({ name, email, password, role });
         const token = generateVerifyToken({ userId: newUser.id, email: newUser.email });
-        const verifyLink = `${process.env.FRONTEND_URL}/verify-email/${token}`;
+        const verifyLink = `${token}`;
 
        await sendVerificationEmail(newUser.email, verifyLink);
        

@@ -13,7 +13,7 @@ import { NotFoundError, ConflictError } from '../utils/errors';
 const userService = new UserService();
 
 export const getAllUsers = asyncHandler(async (
-  req: AuthenticatedRequest, 
+  req: Request,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {
@@ -22,7 +22,7 @@ export const getAllUsers = asyncHandler(async (
   res.json({
     success: true,
     message: 'Users retrieved successfully',
-    data: { users }
+    data: users
   });
 });
 
@@ -93,7 +93,7 @@ export const updateUser = asyncHandler(async (
 });
 
 export const deleteUser = asyncHandler(async (
-  req: AuthenticatedRequest & DeleteUserInput, 
+  req:  DeleteUserInput,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {

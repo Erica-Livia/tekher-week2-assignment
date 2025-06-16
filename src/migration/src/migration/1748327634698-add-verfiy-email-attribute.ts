@@ -12,6 +12,15 @@ export class AddVerfiyEmailAttribute1748327634698 implements MigrationInterface 
             default: false,
           })
         );
+
+        await queryRunner.addColumn(
+          'posts',
+          new TableColumn({
+            name: 'image',
+            type: 'string',
+            isNullable: true,
+          })
+        )
       }
     
       public async down(queryRunner: QueryRunner): Promise<void> {

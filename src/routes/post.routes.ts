@@ -1,10 +1,10 @@
 import express, { Router } from 'express';
-import { 
+import {
   createPost,
   getAllPosts,
   getPostById,
   updatePost,
-  deletePost
+  deletePost, likePost
 } from '../controllers/post.controller';
 import { authenticated } from '../middleware/auth.middleware';
 import { authorize } from '../middleware/authorize';
@@ -23,7 +23,7 @@ router.get('/', getAllPosts);
 router.get('/:id', validate(getPostByIdSchema), getPostById);
 
 // Protected routes - require authentication
-router.use(authenticated);
+// router.use(authenticated);
 
 // Only authenticated users can create posts
 router.post('/create', 
@@ -31,15 +31,19 @@ router.post('/create',
   createPost
 );
 
+router.put('/like/:id', authenticated, likePost);
+
 // Author can update/delete their own posts
-router.put('/:id', 
-  authenticated,
-  validate(updatePostSchema), 
+router.put('/:id',
+  // authorize(['admin']),
+  // authenticated,
+  validate(updatePostSchema),
   updatePost
 );
 
-router.delete('/:id', 
-  authenticated,
+router.delete('/:id',
+  // authorize(['admin']),
+  // authenticated,
   validate(deletePostSchema), 
   deletePost
 );

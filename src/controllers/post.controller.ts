@@ -15,21 +15,22 @@ import { User } from '../modals/User';
 const postService = new PostService();
 
 export const createPost = asyncHandler(async (
-  req: AuthenticatedRequest & CreatePost,
+  req: CreatePost,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {
-  const { title, content } = req.body;
-  const userId = req.user?.id;
+  const { title, content, imageUrl, category } = req.body;
+  // const userId = req.user?.id;
 
-  if (!userId) {
-    throw new ForbiddenError('You must be logged in to create a post');
-  }
+  // if (!userId) {
+  //   throw new ForbiddenError('You must be logged in to create a post');
+  // }
 
   const newPost = postService.create({
       title,
       content,
-      authorId: userId
+      imageUrl,
+      category
   });
 
   res.status(201).json({
@@ -39,12 +40,14 @@ export const createPost = asyncHandler(async (
         id: (await newPost).id,
         title: (await newPost).title,
         content: (await newPost).content,
+        // imageUrl: (await newPost).imageUrl,
+        category: (await newPost).category,
     } }
   });
 });
 
 export const getAllPosts = asyncHandler(async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {
@@ -53,7 +56,9 @@ export const getAllPosts = asyncHandler(async (
   res.json({
     success: true,
     message: 'Posts retrieved successfully',
-    data: { posts, count: posts.length }
+    data: {
+      posts
+    }
   });
 });
 
@@ -77,30 +82,30 @@ export const getPostById = asyncHandler(async (
 });
 
 export const updatePost = asyncHandler(async (
-  req: AuthenticatedRequest & UpdatePost,
+  req:  UpdatePost,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {
-  const id  = parseInt(req.params.id);
-  const { title, content } = req.body;
-  const userId = (req as any).user?.id;
+  // const id  = parseInt(req.params.id);
+  const { title, content, imageUrl, category , isPublished} = req.body;
+  const userRole = (req as any).user?.role;
 
-  if (!userId) {
-    throw new ForbiddenError('You must be logged in to update a post');
-  }
+  // if (userRole != 'admin') {
+  //   throw new ForbiddenError('You cannot update a post');
+  // }
 
   // Check if post exists
-  const existingPost = await postService.findByIdWithUser(id);
+  const existingPost = await postService;
   if (!existingPost) {
     throw new NotFoundError('Post');
   }
 
-  // Check if user is the author of the post
-  if (existingPost.user?.id !== userId) {
-    throw new ForbiddenError('You can only update your own posts');
-  }
+  // // Check if user is the author of the post
+  // if (existingPost.user?.role !== 'admin') {
+  //   throw new ForbiddenError('You must be an admin to update this');
+  // }
 
-  const updatedPost = await postService.update(id, { title, content });
+  const updatedPost = await postService.update( { title, content, category, isPublished})
   
   res.json({
     success: true,
@@ -110,16 +115,16 @@ export const updatePost = asyncHandler(async (
 });
 
 export const deletePost = asyncHandler(async (
-  req: AuthenticatedRequest & DeletePost,
+  req:  DeletePost,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  const userId = req.user?.id;
+  // const userId = req.user?.id;
 
-  if (!userId) {
-    throw new ForbiddenError('You must be logged in to delete a post');
-  }
+  // if (!userId) {
+  //   throw new ForbiddenError('You must be logged in to delete a post');
+  // }
 
   // Check if post exists
   const existingPost = await postService.findByIdWithUser(id);
@@ -127,10 +132,10 @@ export const deletePost = asyncHandler(async (
     throw new NotFoundError('Post');
   }
 
-  // Check if user is the author of the post
-  if (existingPost.user?.id !== userId) {
-    throw new ForbiddenError('You can only delete your own posts');
-  }
+  // // Check if user is the author of the post
+  // if (existingPost.user?.role !== 'admin') {
+  //   throw new ForbiddenError('You must be an admin');
+  // }
 
   const deleted = await postService.delete(id);
   if (!deleted) {
@@ -140,5 +145,31 @@ export const deletePost = asyncHandler(async (
   res.json({
     success: true,
     message: 'Post deleted successfully',
+  });
+});
+
+export const likePost = asyncHandler(async (
+    req: AuthenticatedRequest,
+    res: Response<ApiResponse>,
+    next: NextFunction
+) => {
+  const postId = parseInt(req.params.id);
+  const userId = req.user?.id;
+
+  if (!userId) {
+    throw new ForbiddenError("You must be logged in to like a post");
+  }
+
+  const post = await postService.findById(postId);
+  if (!post) {
+    throw new NotFoundError("Post");
+  }
+
+  const liked = await postService.likePost(postId, userId);
+
+  res.json({
+    success: true,
+    message: liked ? "Post liked successfully" : "You already liked this post",
+    data: { liked },
   });
 });

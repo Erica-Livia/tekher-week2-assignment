@@ -2,6 +2,8 @@ import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 import { User } from '../modals/User';
 import { Post } from '../modals/Post';
+import { Comment } from '../modals/Comment';
+import { Like } from '../modals/Like';
 
 dotenv.config();
 
@@ -13,7 +15,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'blog_db',
   synchronize: true, 
-  entities: [User, Post],
+  entities: [User, Post, Comment, Like],
 
   migrations: ['src/migrations/**/*.ts'],
   subscribers: ['src/subscribers/**/*.ts'],

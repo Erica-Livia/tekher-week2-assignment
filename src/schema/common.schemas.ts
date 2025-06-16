@@ -39,4 +39,12 @@ export const titleSchema = z
 
 export const contentSchema = z
   .string()
-  .max(200, "The content must not exceed 200 characters")
+  .max(300, "The content must not exceed 200 characters")
+
+export const likeSchema = z.number;
+
+export const booleanSchema = z.boolean();
+
+export const imgSchema = z.string();
+
+export const categorySchema = z.number().int().min(0).max(3)

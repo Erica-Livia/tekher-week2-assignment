@@ -29,7 +29,7 @@ router.get('/:id', validate(getUserByIdSchema), getById);
 
 // Only admins can update or delete users
 router.get('/', 
-    authorize(['admin']),
+    // authorize(['admin']),
     getAllUsers
 );
 
