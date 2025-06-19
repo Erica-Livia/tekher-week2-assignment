@@ -6,7 +6,7 @@ import { Post } from "./Post";
 @Unique(["user", "post"])
 export class Like {
     @PrimaryGeneratedColumn()
-    id: number | undefined;
+    id!: number;
 
     @ManyToOne(() => User, user => user.likes, { onDelete: "CASCADE" })
     user: User | undefined;

@@ -3,11 +3,11 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
 
 interface AuthRequest extends Request {
   user?: {
-    role: 'user' | 'admin';
+    role: 'user' | 'admin' | 'superAdmin';
   };
 }
 
-export const authorize = (allowedRoles: ('user' | 'admin')[]): RequestHandler => {
+export const authorize = (allowedRoles: ('user' | 'admin' | 'superAdmin')[]): RequestHandler => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     
     // If user is not authenticated at all
@@ -22,7 +22,6 @@ export const authorize = (allowedRoles: ('user' | 'admin')[]): RequestHandler =>
       return;
     }
 
-    // if everthing is ok
     next();
   };
 };

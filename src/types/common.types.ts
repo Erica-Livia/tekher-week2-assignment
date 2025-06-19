@@ -3,7 +3,10 @@ import { User } from '../modals/User';
 
 
 export interface AuthenticatedRequest extends Request {
-  user?: User;
+  user: {
+    id: string;
+    role: "user" | "admin" | "superAdmin";
+  };
 }
 
 export interface ValidationResult<T> {
@@ -12,7 +15,7 @@ export interface ValidationResult<T> {
   errors?: Record<string, string[]>;
 }
 
-export type UserRole = 'user' | 'admin';
+export type UserRole = 'user' | 'admin' | 'superAdmin';
 
 export interface ApiResponse<T = any> {
   success: boolean;

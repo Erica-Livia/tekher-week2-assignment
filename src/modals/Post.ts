@@ -56,6 +56,9 @@ export class Post {
     @JoinColumn({ name: 'userId' })
     user!: User;
 
+    @Column()
+    userId!: number;
+
     @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
     comments!: Comment[];
     likesCount: any;

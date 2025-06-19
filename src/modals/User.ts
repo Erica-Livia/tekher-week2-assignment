@@ -1,6 +1,7 @@
 import {Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryGeneratedColumn, OneToMany} from 'typeorm';
 import { Post } from './Post';
 import { Like } from './Like';
+import { Comment } from './Comment';
 
 export type UserRole = 'user' | 'admin';
 @Entity('users')
@@ -14,7 +15,7 @@ export class User {
   @Column({ length: 100, nullable: true, unique: true })
   email!: string;
 
-  @Column({ type: 'enum', enum: ['user', 'admin'], default: 'user' })
+  @Column({ type: 'enum', enum: ['user', 'admin', 'superAdmin'], default: 'user' })
   role!: UserRole;
 
   @Column({ length: 255 })
@@ -32,10 +33,13 @@ export class User {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.userId)
   posts!: Post[];
 
   @OneToMany(() => Like, like => like.user)
   likes: Like[] | undefined;
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments!: Post[];
 
 }

@@ -4,6 +4,7 @@ import { User } from '../modals/User';
 import { Post } from '../modals/Post';
 import { Comment } from '../modals/Comment';
 import { Like } from '../modals/Like';
+import {Share} from "../modals/Share";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD || 'postgres',
   database: process.env.DB_DATABASE || 'blog_db',
   synchronize: true, 
-  entities: [User, Post, Comment, Like],
+  entities: [User, Post, Comment, Like, Share],
 
   migrations: ['src/migrations/**/*.ts'],
   subscribers: ['src/subscribers/**/*.ts'],

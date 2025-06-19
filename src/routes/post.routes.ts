@@ -4,8 +4,20 @@ import {
   getAllPosts,
   getPostById,
   updatePost,
-  deletePost, likePost
+  deletePost, likePost, unlikePost, getLikesCount
 } from '../controllers/post.controller';
+
+import {
+  sharePost,
+  getSharesCount
+} from "../controllers/share.controller";
+
+import {
+  createComment,
+    getCommentsByPost,
+    updateComment,
+    deleteComment
+} from "../controllers/comment.controller";
 import { authenticated } from '../middleware/auth.middleware';
 import { authorize } from '../middleware/authorize';
 import { validate } from '../middleware/validation.middleware';
@@ -27,7 +39,8 @@ router.get('/:id', validate(getPostByIdSchema), getPostById);
 
 // Only authenticated users can create posts
 router.post('/create', 
-  validate(createPostSchema), 
+  validate(createPostSchema),
+  authenticated,
   createPost
 );
 
@@ -36,14 +49,14 @@ router.put('/like/:id', authenticated, likePost);
 // Author can update/delete their own posts
 router.put('/:id',
   // authorize(['admin']),
-  // authenticated,
+  authenticated,
   validate(updatePostSchema),
   updatePost
 );
 
 router.delete('/:id',
   // authorize(['admin']),
-  // authenticated,
+  authenticated,
   validate(deletePostSchema), 
   deletePost
 );
@@ -54,5 +67,16 @@ router.delete('/admin/:id',
   validate(deletePostSchema),
   deletePost
 );
+
+router.post("/:id/comment", authenticated, createComment);
+router.get("/:id/comments", getCommentsByPost);
+router.put("/:id/comment/:id", authenticated, updateComment);
+router.delete(":id/comment/:id", authenticated, deleteComment);
+router.post("/:id/like",authenticated, likePost);
+router.delete("/:id/like",authenticated, unlikePost);
+router.get("/:id/likes", getLikesCount);
+router.post("/:id/share", authenticated, sharePost);
+router.get("/:id/shares", getSharesCount);
+
 
 export default router;

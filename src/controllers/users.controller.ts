@@ -43,7 +43,7 @@ export const search = asyncHandler(async (
 });
 
 export const getById = asyncHandler(async (
-  req: AuthenticatedRequest & GetUserByIdInput, 
+  req: GetUserByIdInput,
   res: Response<ApiResponse>,
   next: NextFunction
 ) => {

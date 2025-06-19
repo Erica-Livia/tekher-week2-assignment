@@ -4,27 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e80118da-d28b-45ae-a570-1d98ab85e545" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/modals/Comment.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/modals/Like.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+    <list default="true" id="e80118da-d28b-45ae-a570-1d98ab85e545" name="Changes" comment="endpoints creation, restructure etc">
+      <change afterPath="$PROJECT_DIR$/src/controllers/comment.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/controllers/share.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/modals/Share.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/comment.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/like.service.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/services/share.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/database.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/database.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/auth.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/auth.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/post.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/post.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controllers/users.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/controllers/users.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware/auth.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/auth.middleware.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/migration/src/migration/1748327634698-add-verfiy-email-attribute.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/migration/src/migration/1748327634698-add-verfiy-email-attribute.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/middleware/authorize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/authorize.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modals/Comment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modals/Comment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modals/Like.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modals/Like.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modals/Post.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modals/Post.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modals/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modals/User.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/post.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/post.routes.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/users.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/users.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/schema/common.schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/schema/common.schemas.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/schema/post.shcemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/schema/post.shcemas.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/post.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/post.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/common.types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/common.types.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/email.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/email.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/jwt.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/jwt.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +48,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2yQMLzxhZ75MuMfBquXL3JVNtNk" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -82,10 +88,24 @@
       <workItem from="1750021198842" duration="3808000" />
       <workItem from="1750026693296" duration="15622000" />
       <workItem from="1750055005909" duration="1173000" />
+      <workItem from="1750075447198" duration="540000" />
+      <workItem from="1750089956549" duration="1784000" />
+      <workItem from="1750149590283" duration="4480000" />
+      <workItem from="1750167261371" duration="2712000" />
+      <workItem from="1750175063620" duration="595000" />
+      <workItem from="1750229330966" duration="9390000" />
+      <workItem from="1750244286030" duration="1449000" />
+      <workItem from="1750247679517" duration="9171000" />
+      <workItem from="1750261958641" duration="2304000" />
+      <workItem from="1750316409138" duration="15098000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="endpoints creation, restructure etc" />
+    <option name="LAST_COMMIT_MESSAGE" value="endpoints creation, restructure etc" />
   </component>
 </project>

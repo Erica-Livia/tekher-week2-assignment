@@ -3,8 +3,7 @@ import { createTransporter } from "../config/mail-transport";
 
 export async function sendVerificationEmail(email: string, verifyToken: string) {
   // @ts-ignore
-  const link = `${process.env.FRONTEND_URL.replace(/\/$/, "")}/verify-email?token=${verifyToken
-  }`;
+  const link = `${process.env.FRONTEND_URL.replace(/\/$/, "")}/verify-email?token=${verifyToken}`;
   const transporter = await createTransporter();
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
@@ -21,7 +20,7 @@ export async function sendVerificationEmail(email: string, verifyToken: string) 
 
 export const sendResetPasswordEmail = async (email: string, resetToken: string) => {
   // @ts-ignore
-  const resetLink = `${process.env.FRONTEND_URL.replace(/\/$/, "")}/reset-password?token=${resetToken}`;
+  const link = `${process.env.FRONTEND_URL.replace(/\/$/, "")}/reset-password?token=${resetToken}`;
   const transporter = await createTransporter();
 
   const mailOptions = {
@@ -31,7 +30,7 @@ export const sendResetPasswordEmail = async (email: string, resetToken: string) 
     html: `
       <h2>Password Reset Request</h2>
       <p>Click the link below to reset your password:</p>
-      <a href="${resetLink}">${resetLink}</a>
+      <a href="${link}">${link}</a>
       <p>If you didn't request this, you can safely ignore this email.</p>
       <p>This link will expire in 15 minutes.</p>
     `,

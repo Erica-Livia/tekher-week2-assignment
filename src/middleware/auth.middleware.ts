@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 interface JwtPayload {
   id: number;
   email: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'superAdmin';
   iat: number;
   exp: number;
 }

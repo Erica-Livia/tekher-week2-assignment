@@ -9,42 +9,52 @@ import {
 import { AuthenticatedRequest, ApiResponse } from '../types/common.types';
 import { PostService } from '../services/post.service';
 import { NotFoundError, ForbiddenError } from '../utils/errors';
-import { Post } from '../modals/Post';
-import { User } from '../modals/User';
+import { LikeService } from "../services/like.service";
 
 const postService = new PostService();
+const likeService = new LikeService();
 
 export const createPost = asyncHandler(async (
-  req: CreatePost,
-  res: Response<ApiResponse>,
-  next: NextFunction
+    req: AuthenticatedRequest & CreatePost,
+    res: Response<ApiResponse>,
+    next: NextFunction
 ) => {
   const { title, content, imageUrl, category } = req.body;
-  // const userId = req.user?.id;
+  const userId = Number(req.user?.id);
+  const userRole = req.user?.role;
+  // console.log("userId:", userId);
+  // console.log("userRole:", userRole);
+  // console.log(req.user);
 
-  // if (!userId) {
-  //   throw new ForbiddenError('You must be logged in to create a post');
-  // }
 
-  const newPost = postService.create({
-      title,
-      content,
-      imageUrl,
-      category
+  if (!userId || !["admin", "superAdmin"].includes(userRole)) {
+    throw new ForbiddenError("Only admins and super admins can create posts");
+  }
+
+  const newPost = await postService.create({
+    title,
+    content,
+    imageUrl,
+    category,
+    userId
   });
 
   res.status(201).json({
     success: true,
-    message: 'Post created successfully',
-    data: { post: {
-        id: (await newPost).id,
-        title: (await newPost).title,
-        content: (await newPost).content,
-        // imageUrl: (await newPost).imageUrl,
-        category: (await newPost).category,
-    } }
+    message: "Post created successfully",
+    data: {
+      post: {
+        id: newPost.id,
+        title: newPost.title,
+        content: newPost.content,
+        category: newPost.category,
+        userId: userId,
+        // author: newPost.user.name
+      },
+    },
   });
 });
+
 
 export const getAllPosts = asyncHandler(async (
   req: Request,
@@ -82,69 +92,76 @@ export const getPostById = asyncHandler(async (
 });
 
 export const updatePost = asyncHandler(async (
-  req:  UpdatePost,
-  res: Response<ApiResponse>,
-  next: NextFunction
+    req: AuthenticatedRequest & UpdatePost,
+    res: Response<ApiResponse>,
+    next: NextFunction
 ) => {
-  // const id  = parseInt(req.params.id);
-  const { title, content, imageUrl, category , isPublished} = req.body;
-  const userRole = (req as any).user?.role;
+  const { id } = req.params;
+  const { title, content, imageUrl, category, isPublished } = req.body;
+  const userId = Number(req.user?.id);
+  const userRole = req.user?.role;
 
-  // if (userRole != 'admin') {
-  //   throw new ForbiddenError('You cannot update a post');
-  // }
-
-  // Check if post exists
-  const existingPost = await postService;
+  const existingPost = await postService.findByIdWithUser(Number(id));
   if (!existingPost) {
-    throw new NotFoundError('Post');
+    throw new NotFoundError("Post");
   }
 
-  // // Check if user is the author of the post
-  // if (existingPost.user?.role !== 'admin') {
-  //   throw new ForbiddenError('You must be an admin to update this');
-  // }
+  // Role-based access control
+  if (userRole === "admin" && existingPost.user?.id !== userId) {
+    throw new ForbiddenError("Admins can only update their own posts");
+  }
 
-  const updatedPost = await postService.update( { title, content, category, isPublished})
-  
+  if (userRole === "user") {
+    throw new ForbiddenError("Users are not allowed to update posts");
+  }
+
+  const updatedPost = await postService.update(id, {
+    title,
+    content,
+    imageUrl,
+    category,
+    isPublished,
+  });
+
   res.json({
     success: true,
-    message: 'Post updated successfully',
-    data: { post: updatedPost }
+    message: "Post updated successfully",
+    data: { post: updatedPost },
   });
 });
 
+
 export const deletePost = asyncHandler(async (
-  req:  DeletePost,
-  res: Response<ApiResponse>,
-  next: NextFunction
+    req: AuthenticatedRequest & DeletePost,
+    res: Response<ApiResponse>,
+    next: NextFunction
 ) => {
   const { id } = req.params;
-  // const userId = req.user?.id;
+  const userId = Number(req.user?.id);
+  const userRole = req.user?.role;
 
-  // if (!userId) {
-  //   throw new ForbiddenError('You must be logged in to delete a post');
-  // }
-
-  // Check if post exists
   const existingPost = await postService.findByIdWithUser(id);
   if (!existingPost) {
-    throw new NotFoundError('Post');
+    throw new NotFoundError("Post");
   }
 
-  // // Check if user is the author of the post
-  // if (existingPost.user?.role !== 'admin') {
-  //   throw new ForbiddenError('You must be an admin');
-  // }
+  // Role-based access control
+  if (userRole === "admin" && existingPost.user?.id !== userId) {
+    throw new ForbiddenError("Admins can only delete their own posts");
+  }
+
+  if (userRole === "user") {
+    throw new ForbiddenError("Users are not allowed to delete posts");
+  }
 
   const deleted = await postService.delete(id);
   if (!deleted) {
-    throw new Error('Failed to delete post');
+    throw new Error("Failed to delete post");
   }
-  
+
   res.json({
     success: true,
-    message: 'Post deleted successfully',
+    message: "Post deleted successfully",
   });
 });
 
@@ -154,7 +171,7 @@ export const likePost = asyncHandler(async (
     next: NextFunction
 ) => {
   const postId = parseInt(req.params.id);
-  const userId = req.user?.id;
+  const userId = Number(req.user?.id);
 
   if (!userId) {
     throw new ForbiddenError("You must be logged in to like a post");
@@ -165,11 +182,59 @@ export const likePost = asyncHandler(async (
     throw new NotFoundError("Post");
   }
 
-  const liked = await postService.likePost(postId, userId);
+  const liked = await likeService.likePost(postId, userId);
 
   res.json({
     success: true,
     message: liked ? "Post liked successfully" : "You already liked this post",
     data: { liked },
+  });
+});
+
+export const getLikesCount = asyncHandler(async (
+    req: AuthenticatedRequest,
+    res: Response<ApiResponse>,
+    next: NextFunction
+) => {
+  const postId = parseInt(req.params.id);
+  const post = await postService.findById(postId);
+
+  if (!post) {
+    throw new NotFoundError("Post");
+  }
+
+  const count = await likeService.countLikes(postId);
+
+  res.json({
+    success: true,
+    message: "Like count retrieved successfully",
+    data: { count },
+  });
+});
+
+// POST /posts/:id/unlike
+export const unlikePost = asyncHandler(async (
+    req: AuthenticatedRequest,
+    res: Response<ApiResponse>,
+    next: NextFunction
+) => {
+  const postId = parseInt(req.params.id);
+  const userId = Number(req.user?.id);
+
+  if (!userId) {
+    throw new ForbiddenError("You must be logged in to unlike a post");
+  }
+
+  const post = await postService.findById(postId);
+  if (!post) {
+    throw new NotFoundError("Post");
+  }
+
+  const unliked = await likeService.unlikePost(postId, userId);
+
+  res.json({
+    success: true,
+    message: unliked ? "Post unliked successfully" : "You have not liked this post yet",
+    data: { unliked },
   });
 });

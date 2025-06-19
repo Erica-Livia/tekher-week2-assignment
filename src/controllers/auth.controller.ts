@@ -119,7 +119,7 @@ export const login = asyncHandler(async (
       }
     });
   });
-  
+
 
 
 //forgot Password
@@ -136,14 +136,15 @@ export const forgotPassword = asyncHandler(async (
     }
   
     const token = generateResetToken(user.email);
-    const resetLink = `${process.env.RESET_PASSWORD_URL}/${token}`;
+    const resetLink = `${token}`;
   
     await sendResetPasswordEmail(email, resetLink);
   
     res.status(200).json({
       success: true,
       message: 'Password reset link sent to your email'
-    }); 
+    });
+
   });
 
 // Reset Password
@@ -163,7 +164,7 @@ export const resetPassword = asyncHandler(async (
     }
   
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await userService.update(user.id, { password: hashedPassword });
+    await userService.update(user.id, { password: newPassword });
   
     res.status(200).json({
       success: true,

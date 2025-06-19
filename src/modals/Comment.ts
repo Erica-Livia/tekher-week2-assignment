@@ -1,27 +1,27 @@
-import {
-    Entity,
-    PrimaryGeneratedColumn,
-    Column,
-    ManyToOne,
-    CreateDateColumn,
-} from 'typeorm';
-import { Post } from './Post';
-import { User } from './User';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn } from "typeorm";
+import { User } from "./User";
+import { Post } from "./Post";
 
-@Entity('comments')
+@Entity()
 export class Comment {
     @PrimaryGeneratedColumn()
     id!: number;
 
-    @Column({ length: 300 })
+    @Column()
     content!: string;
-
-    @ManyToOne(() => Post, (post) => post.comments)
-    post!: Post;
-
-    @ManyToOne(() => User)
-    user!: User;
 
     @CreateDateColumn()
     createdAt!: Date;
+
+    @ManyToOne(() => User, user => user.comments, { onDelete: "CASCADE" })
+    user!: User;
+
+    @ManyToOne(() => Post, post => post.comments, { onDelete: "CASCADE" })
+    post!: Post;
+
+    @ManyToOne(() => Comment, comment => comment.replies, { nullable: true })
+    parentComment?: Comment;
+
+    @OneToMany(() => Comment, comment => comment.parentComment)
+    replies?: Comment[];
 }
